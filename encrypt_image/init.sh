@@ -3,12 +3,15 @@ mkdir decrypted
 mkdir encrypted && cd encrypted
 
 # create image size 1GB
+echo "Create image"
 dd if=/dev/zero of=encrypted.img bs=1 count=0 seek=1G
 
 # create keyfile
+echo "Create keyfile"
 dd if=/dev/random of=key.keyfile bs=1024 count=2
 
 # create encrypted image with keyfile
+echo "encrypt image with keyfile"
 sudo cryptsetup luksFormat encrypted.img key.keyfile
 
 echo "Enter passphrase( first half - your master key, last half - random passphrase on paper )"
@@ -22,6 +25,8 @@ gpg -c key.keyfile
 shred -zun 2 key.keyfile
 
 sudo mkfs.ext4 /dev/mapper/myEncryptedVolume
+echo "Make filesystem"
+
 sudo mount /dev/mapper/myEncryptedVolume ../decrypted
 sudo chown -R $USER ../decrypted
 

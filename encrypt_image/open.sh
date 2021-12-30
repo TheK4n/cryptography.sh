@@ -14,8 +14,10 @@ then
 fi
 
 mkdir decrypted
+echo "decrypt keyfile"
 gpg -d "$ENCRYPTED_KEYFILE" > decrypted/key.keyfile
 
+echo "decrypt image with keyfile"
 sudo cryptsetup luksOpen encrypted/encrypted.img myEncryptedVolume --key-file decrypted/key.keyfile
 shred -zun 2 decrypted/key.keyfile
 
